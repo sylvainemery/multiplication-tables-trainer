@@ -36,6 +36,8 @@ const startGame = app => {
   let prompt = `Hello!`;
   app.data.multiplicand = getRandomNumber(2, 9);
   app.data.multiplier = getRandomNumber(1, 10);
+  app.data.currentStreak = 0;
+  app.data.bestStreak = 0;
   app.ask(`${prompt} What's ${app.data.multiplicand} by ${app.data.multiplier}?`);
 };
 
@@ -50,8 +52,16 @@ const checkGuess = app => {
   let diff = Math.abs(guess - goodAnswer);
   let prompt = ``;
   if (diff === 0) {
+    app.data.currentStreak++;
     prompt = `Correct!`;
+    if (app.data.currentStreak >= 3) {
+      prompt = `${prompt} ${app.data.currentStreak} in a row, keep going!`;
+    }
   } else {
+    if (app.data.bestStreak < app.data.currentStreak) {
+      app.data.bestStreak = app.data.currentStreak;
+    }
+    app.data.currentStreak = 0;
     prompt = `Wrong...`;
   }
   prompt = `${prompt} ${app.data.multiplicand} by ${app.data.multiplier} is ${goodAnswer}.`;
@@ -67,7 +77,11 @@ const checkGuess = app => {
  * @return {void}
  */
 const quitGame = app => {
-  app.tell(`OK, see you later!`);
+  let prompt = ``;
+  if (app.data.bestStreak > 0) {
+    prompt = `${prompt} Your best streak was ${app.data.bestStreak}.`;
+  }
+  app.tell(`${prompt} See you later!`);
 };
 
 /** @type {Map<string, function(ApiAiApp): void>} */
