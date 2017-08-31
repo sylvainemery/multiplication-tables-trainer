@@ -1,0 +1,31 @@
+{
+  "name": "multiplication-tables-trainer-action-on-google",
+  "description": "The webhook behind the Multiplication Tables Trainer Google Assistant App",
+  "version": "0.0.1",
+  "private": true,
+  "license": "Unlicense",
+  "author": "Sylvain Emery",
+  "engines": {
+    "node": "~6.0"
+  },
+  "scripts": {
+    "lint": "eslint --fix \"**/*.js\"",
+    "start": "firebase serve --only functions",
+    "deploy": "firebase deploy --only functions",
+    "test": "npm run lint"
+  },
+  "dependencies": {
+    "actions-on-google": "^1.2.1",
+    "firebase-admin": "^5.2.1",
+    "firebase-functions": "^0.6.3"
+  },
+  "devDependencies": {
+    "eslint": "^4.5.0",
+    "eslint-config-semistandard": "^11.0.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
+}
