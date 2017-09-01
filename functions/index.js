@@ -13,6 +13,7 @@ const {
 const Actions = {
   DEFAULT_WELCOME: 'input.welcome',
   CHECK_GUESS: 'check_guess',
+  PASS_QUESTION: 'pass_question',
   QUIT_GAME: 'quit_game'
 };
 
@@ -36,6 +37,10 @@ const CORRECT_GUESS_PROMPTS = ['Correct!',
 const WRONG_GUESS_PROMPTS = ['Wrong...',
   'That\'s not the correct answer...',
   'No...'
+];
+const PASS_QUESTION_PROMPTS = ['OK...',
+  'I\'m sorry that you don\'t know...',
+  'It\'s a shame that you don\'t know...'
 ];
 const MULTIPLICATION_PROMPTS = ['What\'s %s by %s?',
   'Now, what\'s %s by %s?',
@@ -116,6 +121,29 @@ const checkGuess = app => {
 };
 
 /**
+ * pass to the next question
+ * @param {ApiAiApp} app ApiAiApp instance
+ * @return {void}
+ */
+const passQuestion = app => {
+  let goodAnswer = app.data.multiplicand * app.data.multiplier;
+  let response = [];
+  if (app.data.bestStreak < app.data.currentStreak) {
+    app.data.bestStreak = app.data.currentStreak;
+  }
+  app.data.currentStreak = 0;
+  response.push(getRandomValue(PASS_QUESTION_PROMPTS));
+
+  response.push(sprintf(getRandomValue(MULTIPLICATION_RESULT_PROMPTS),
+    app.data.multiplicand, app.data.multiplier, goodAnswer));
+  app.data.multiplicand = getRandomNumber(2, 9);
+  app.data.multiplier = getRandomNumber(1, 10);
+  response.push(sprintf(getRandomValue(MULTIPLICATION_PROMPTS),
+    app.data.multiplicand, app.data.multiplier));
+  app.ask(concat(response));
+};
+
+/**
  * Say goodbye
  * @param {ApiAiApp} app ApiAiApp instance
  * @return {void}
@@ -134,6 +162,7 @@ const quitGame = app => {
 const actionMap = new Map();
 actionMap.set(Actions.DEFAULT_WELCOME, startGame);
 actionMap.set(Actions.CHECK_GUESS, checkGuess);
+actionMap.set(Actions.PASS_QUESTION, passQuestion);
 actionMap.set(Actions.QUIT_GAME, quitGame);
 
 /**
