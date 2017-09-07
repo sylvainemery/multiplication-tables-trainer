@@ -14,6 +14,7 @@ const Actions = {
   DEFAULT_WELCOME: 'input.welcome',
   CHECK_GUESS: 'check_guess',
   PASS_QUESTION: 'pass_question',
+  REPEAT_QUESTION: 'repeat_question',
   QUIT_GAME: 'quit_game'
 };
 
@@ -144,6 +145,18 @@ const passQuestion = app => {
 };
 
 /**
+ * repeat the question
+ * @param {ApiAiApp} app ApiAiApp instance
+ * @return {void}
+ */
+const repeatQuestion = app => {
+  let response = [];
+  response.push(sprintf(getRandomValue(MULTIPLICATION_PROMPTS),
+    app.data.multiplicand, app.data.multiplier));
+  app.ask(concat(response));
+};
+
+/**
  * Say goodbye
  * @param {ApiAiApp} app ApiAiApp instance
  * @return {void}
@@ -163,6 +176,7 @@ const actionMap = new Map();
 actionMap.set(Actions.DEFAULT_WELCOME, startGame);
 actionMap.set(Actions.CHECK_GUESS, checkGuess);
 actionMap.set(Actions.PASS_QUESTION, passQuestion);
+actionMap.set(Actions.REPEAT_QUESTION, repeatQuestion);
 actionMap.set(Actions.QUIT_GAME, quitGame);
 
 /**
