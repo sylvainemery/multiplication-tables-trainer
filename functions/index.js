@@ -163,10 +163,19 @@ const multiplicationTablesTrainer = functions.https.onRequest((request, response
 
   i18n.configure({
     locales: ['en-US', 'fr-FR'],
+    fallbacks: {
+      'en': 'en-US',
+      'fr': 'fr-FR'
+    },
     directory: path.join(__dirname, '/locales'),
     defaultLocale: 'en-US'
   });
-  i18n.setLocale(app.getUserLocale());
+
+  var locale = app.getUserLocale();
+  if (!locale) {
+    locale = request.body['lang'];
+  }
+  i18n.setLocale(locale);
 
   app.handleRequest(actionMap);
 });
