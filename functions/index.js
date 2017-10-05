@@ -8,6 +8,8 @@ const functions = require('firebase-functions');
 const {
   sprintf
 } = require('sprintf-js');
+const i18n = require('i18n');
+const path = require('path');
 
 /** API.AI Actions {@link https://api.ai/docs/actions-and-parameters#actions} */
 const Actions = {
@@ -22,36 +24,6 @@ const Actions = {
 const Args = {
   GUESS: 'guess'
 };
-
-const GREETING_PROMPTS = ['Let\'s train on multiplication tables!',
-  'Welcome to Multiplication Tables Trainer!',
-  'Hi! Let\'s revise some multiplication tables!'
-];
-const GOODBYE_PROMPTS = ['See you later!',
-  'See you next time!',
-  'Bye!'
-];
-const CORRECT_GUESS_PROMPTS = ['Correct!',
-  'You\'re right!',
-  'Yes!'
-];
-const WRONG_GUESS_PROMPTS = ['Wrong...',
-  'That\'s not the correct answer...',
-  'No...'
-];
-const PASS_QUESTION_PROMPTS = ['OK...',
-  'I\'m sorry that you don\'t know...',
-  'It\'s a shame that you don\'t know...'
-];
-const MULTIPLICATION_PROMPTS = ['What\'s %s by %s?',
-  'Now, what\'s %s by %s?',
-  '%s by %s?'
-];
-const CURRENT_STREAK_PROMPTS = ['Your current streak is %s.',
-  '%s in a row, keep going!'
-];
-const BEST_STREAK_PROMPTS = ['Your best streak is %s.'];
-const MULTIPLICATION_RESULT_PROMPTS = ['%s by %s is %s.'];
 
 /**
  * @template T
@@ -78,12 +50,12 @@ const concat = messages => messages.map(message => message.trim()).join(' ');
  * @return {void}
  */
 const startGame = app => {
-  const response = [getRandomValue(GREETING_PROMPTS)];
+  const response = [getRandomValue(i18n.__('GREETING_PROMPTS'))];
   app.data.multiplicand = getRandomNumber(2, 9);
   app.data.multiplier = getRandomNumber(1, 10);
   app.data.currentStreak = 0;
   app.data.bestStreak = 0;
-  response.push(sprintf(getRandomValue(MULTIPLICATION_PROMPTS),
+  response.push(sprintf(getRandomValue(i18n.__('MULTIPLICATION_PROMPTS')),
     app.data.multiplicand, app.data.multiplier));
   app.ask(concat(response));
 };
@@ -100,9 +72,9 @@ const checkGuess = app => {
   let response = [];
   if (diff === 0) {
     app.data.currentStreak++;
-    response.push(getRandomValue(CORRECT_GUESS_PROMPTS));
+    response.push(getRandomValue(i18n.__('CORRECT_GUESS_PROMPTS')));
     if (app.data.currentStreak >= 3) {
-      response.push(sprintf(getRandomValue(CURRENT_STREAK_PROMPTS),
+      response.push(sprintf(getRandomValue(i18n.__('CURRENT_STREAK_PROMPTS')),
         app.data.currentStreak));
     }
   } else {
@@ -110,13 +82,13 @@ const checkGuess = app => {
       app.data.bestStreak = app.data.currentStreak;
     }
     app.data.currentStreak = 0;
-    response.push(getRandomValue(WRONG_GUESS_PROMPTS));
+    response.push(getRandomValue(i18n.__('WRONG_GUESS_PROMPTS')));
   }
-  response.push(sprintf(getRandomValue(MULTIPLICATION_RESULT_PROMPTS),
+  response.push(sprintf(getRandomValue(i18n.__('MULTIPLICATION_RESULT_PROMPTS')),
     app.data.multiplicand, app.data.multiplier, goodAnswer));
   app.data.multiplicand = getRandomNumber(2, 9);
   app.data.multiplier = getRandomNumber(1, 10);
-  response.push(sprintf(getRandomValue(MULTIPLICATION_PROMPTS),
+  response.push(sprintf(getRandomValue(i18n.__('MULTIPLICATION_PROMPTS')),
     app.data.multiplicand, app.data.multiplier));
   app.ask(concat(response));
 };
@@ -133,13 +105,13 @@ const passQuestion = app => {
     app.data.bestStreak = app.data.currentStreak;
   }
   app.data.currentStreak = 0;
-  response.push(getRandomValue(PASS_QUESTION_PROMPTS));
+  response.push(getRandomValue(i18n.__('PASS_QUESTION_PROMPTS')));
 
-  response.push(sprintf(getRandomValue(MULTIPLICATION_RESULT_PROMPTS),
+  response.push(sprintf(getRandomValue(i18n.__('MULTIPLICATION_RESULT_PROMPTS')),
     app.data.multiplicand, app.data.multiplier, goodAnswer));
   app.data.multiplicand = getRandomNumber(2, 9);
   app.data.multiplier = getRandomNumber(1, 10);
-  response.push(sprintf(getRandomValue(MULTIPLICATION_PROMPTS),
+  response.push(sprintf(getRandomValue(i18n.__('MULTIPLICATION_PROMPTS')),
     app.data.multiplicand, app.data.multiplier));
   app.ask(concat(response));
 };
@@ -151,7 +123,7 @@ const passQuestion = app => {
  */
 const repeatQuestion = app => {
   let response = [];
-  response.push(sprintf(getRandomValue(MULTIPLICATION_PROMPTS),
+  response.push(sprintf(getRandomValue(i18n.__('MULTIPLICATION_PROMPTS')),
     app.data.multiplicand, app.data.multiplier));
   app.ask(concat(response));
 };
@@ -164,10 +136,10 @@ const repeatQuestion = app => {
 const quitGame = app => {
   let response = [];
   if (app.data.bestStreak > 0) {
-    response.push(sprintf(getRandomValue(BEST_STREAK_PROMPTS),
+    response.push(sprintf(getRandomValue(i18n.__('BEST_STREAK_PROMPTS')),
       app.data.bestStreak));
   }
-  response.push(getRandomValue(GOODBYE_PROMPTS));
+  response.push(getRandomValue(i18n.__('GOODBYE_PROMPTS')));
   app.tell(concat(response));
 };
 
@@ -191,6 +163,14 @@ const multiplicationTablesTrainer = functions.https.onRequest((request, response
   });
   console.log(`Request headers: ${JSON.stringify(request.headers)}`);
   console.log(`Request body: ${JSON.stringify(request.body)}`);
+
+  i18n.configure({
+    locales: ['en-US', 'fr-FR'],
+    directory: path.join(__dirname, '/locales'),
+    defaultLocale: 'en-US'
+  });
+  i18n.setLocale(app.getUserLocale());
+
   app.handleRequest(actionMap);
 });
 

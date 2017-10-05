@@ -1,0 +1,42 @@
+{
+  "GREETING_PROMPTS":[
+    "Let's train on multiplication tables!",
+    "Welcome to Multiplication Tables Trainer!",
+    "Hi! Let's revise some multiplication tables!"
+  ],
+  "GOODBYE_PROMPTS":[
+    "See you later!",
+    "See you next time!",
+    "Bye!"
+  ],
+  "CORRECT_GUESS_PROMPTS":[
+    "Correct!",
+    "You're right!",
+    "Yes!"
+  ],
+  "WRONG_GUESS_PROMPTS":[
+    "Wrong...",
+    "That's not the correct answer...",
+    "No..."
+  ],
+  "PASS_QUESTION_PROMPTS":[
+    "OK...",
+    "I'm sorry that you don't know...",
+    "It's a shame that you don't know..."
+  ],
+  "MULTIPLICATION_PROMPTS":[
+    "What's %s by %s?",
+    "Now, what's %s by %s?",
+    "%s by %s?"
+  ],
+  "CURRENT_STREAK_PROMPTS":[
+    "Your current streak is %s.",
+    "%s in a row, keep going!"
+  ],
+  "BEST_STREAK_PROMPTS":[
+    "Your best streak is: %s."
+  ],
+  "MULTIPLICATION_RESULT_PROMPTS":[
+    "%s by %s is %s."
+  ]
+}

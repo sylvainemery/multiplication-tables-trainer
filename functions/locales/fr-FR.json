@@ -1,0 +1,43 @@
+{
+  "GREETING_PROMPTS":[
+    "Révisons les tables de multiplication !",
+    "Bienvenue dans la révision des tables de multiplications !",
+    "Bonjour ! Commençons à réviser les tables de multiplication !"
+  ],
+  "GOODBYE_PROMPTS":[
+    "A plus tard !",
+    "A bientôt!",
+    "Aurevoir!"
+  ],
+  "CORRECT_GUESS_PROMPTS":[
+    "Correct !",
+    "Tu as raison !",
+    "Oui !",
+    "Bravo !"
+  ],
+  "WRONG_GUESS_PROMPTS":[
+    "C'est faux...",
+    "Ce n'est pas la bonne réponse...",
+    "Non..."
+  ],
+  "PASS_QUESTION_PROMPTS":[
+    "OK...",
+    "Je suis désolé que tu ne saches pas...",
+    "C'est dommage que tu ne saches pas..."
+  ],
+  "MULTIPLICATION_PROMPTS":[
+    "Combien font %s fois %s ?",
+    "Que font %s fois %s ?",
+    "%s fois %s ?"
+  ],
+  "CURRENT_STREAK_PROMPTS":[
+    "Tu as %s bonne réponses à la suite.",
+    "%s à la suite, continue !"
+  ],
+  "BEST_STREAK_PROMPTS":[
+    "Ton meilleur score est : %s."
+  ],
+  "MULTIPLICATION_RESULT_PROMPTS":[
+    "%s fois %s font %s."
+  ]
+}
