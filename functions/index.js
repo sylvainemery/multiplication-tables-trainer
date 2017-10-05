@@ -72,15 +72,15 @@ const checkGuess = app => {
   let response = [];
   if (diff === 0) {
     app.data.currentStreak++;
+    if (app.data.bestStreak < app.data.currentStreak) {
+      app.data.bestStreak = app.data.currentStreak;
+    }
     response.push(getRandomValue(i18n.__('CORRECT_GUESS_PROMPTS')));
     if (app.data.currentStreak >= 3) {
       response.push(sprintf(getRandomValue(i18n.__('CURRENT_STREAK_PROMPTS')),
         app.data.currentStreak));
     }
   } else {
-    if (app.data.bestStreak < app.data.currentStreak) {
-      app.data.bestStreak = app.data.currentStreak;
-    }
     app.data.currentStreak = 0;
     response.push(getRandomValue(i18n.__('WRONG_GUESS_PROMPTS')));
   }
@@ -101,9 +101,6 @@ const checkGuess = app => {
 const passQuestion = app => {
   let goodAnswer = app.data.multiplicand * app.data.multiplier;
   let response = [];
-  if (app.data.bestStreak < app.data.currentStreak) {
-    app.data.bestStreak = app.data.currentStreak;
-  }
   app.data.currentStreak = 0;
   response.push(getRandomValue(i18n.__('PASS_QUESTION_PROMPTS')));
 
